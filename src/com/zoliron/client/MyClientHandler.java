@@ -38,13 +38,13 @@ public class MyClientHandler implements ClientHandler{
 		try{
 			String problem = readToEnd(inFromClient);
 
-//			System.out.println("Problem:");
-//			System.out.println(problem);
+			System.out.println("Problem:");
+			System.out.println(problem);
 
 			String solution = solve(solver, problem);
 
-//			System.out.println("Solution:");
-//			System.out.println(solution);
+			System.out.println("Solution:");
+			System.out.println(solution);
 
 			sendSolution(solution, outToClient);
 		} catch (Exception e){
