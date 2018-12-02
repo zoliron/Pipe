@@ -4,6 +4,7 @@ import com.zoliron.games.pipe.model.PipeBoard;
 import com.zoliron.games.pipe.searchable.PipeSearchable;
 import com.zoliron.games.pipe.searchable.PipeSearchableState;
 import com.zoliron.searcher.Solution;
+import com.zoliron.searcher.algorithms.AStar;
 import com.zoliron.searcher.algorithms.BestFirstSearch;
 import com.zoliron.solver.Solver;
 import com.zoliron.utils.Point;
@@ -29,7 +30,7 @@ public class PipeSolver implements Solver<PipeBoard>{
 	@Override
 	public String solve(PipeBoard problem){
 		PipeSearchable searchable = new PipeSearchable(problem);
-		Solution<PipeSearchableState> solution = new BestFirstSearch<PipeSearchableState>().search(searchable);
+		Solution<PipeSearchableState> solution = new AStar<PipeSearchableState>().search(searchable);
 		if (solution == null)
 			return NO_SOLUTION;
 

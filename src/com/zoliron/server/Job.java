@@ -2,7 +2,6 @@ package com.zoliron.server;
 
 import com.zoliron.client.ClientHandler;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -30,5 +29,9 @@ public class Job implements Runnable{
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static <U extends Comparable<? super U>, T> int getPriority(T t) {
+        return 10;
     }
 }
