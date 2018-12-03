@@ -2,13 +2,15 @@ package com.zoliron.server;
 
 import com.zoliron.client.ClientHandler;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Comparator;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 
 
 /**
@@ -16,126 +18,144 @@ import java.util.concurrent.*;
  *
  * @author Ronen Zolicha
  */
-public class MyServer implements Server {
+public class MyServer implements Server{
 
 
-    /**
-     * The server port.
-     */
-    private final int port;
+
+	private static final Comparator<Runnable> COMPARATOR = new Comparator<>(){
+
+		@Override
+		public int compare(Runnable lhs, Runnable rhs){
+			int lhsPriority = calculatePriority(lhs);
+			int rhsPriority = calculatePriority(rhs);
+
+			return Integer.compare(lhsPriority, rhsPriority);
+		}
 
 
-    /**
-     * The {@link ClientHandler}.
-     */
-    private ClientHandler clientHandler;
+
+		private int calculatePriority(Runnable task){
+			if (task instanceof Job){
+				Job job = (Job)task;
+
+				return job.getPriority();
+			}
+
+			return Integer.MIN_VALUE;
+		}
+
+	};
 
 
-    /**
-     * Indicates whether the server is stopped.
-     */
-    private volatile boolean stop;
 
-    private ExecutorService priorityJobPoolExecutor;
-    private ExecutorService priorityJobScheduler = Executors.newSingleThreadExecutor();
-    private PriorityBlockingQueue<Job> priorityQueue;
+	/**
+	 * The server port.
+	 */
+	private final int port;
 
 
-    /**
-     * Creates new {@link MyServer} with the specified port.
-     */
-    public MyServer(int port, int poolSize, int queueSize) {
-        this.port = port;
-        setExecutor(poolSize);
-        priorityQueueInitialization(queueSize);
-    }
+
+	/**
+	 * The server maximum concurrency.
+	 */
+	private final int poolSize;
 
 
-    @Override
-    public void start(ClientHandler clientHandler) {
-        this.clientHandler = clientHandler;
-        this.stop = false;
 
-        new Thread(() -> {
-            try {
-                runServer();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
+	/**
+	 * The executor.
+	 */
+	private ExecutorService executor;
 
 
-    @Override
-    public void stop() {
-        try {
-            priorityJobPoolExecutor.awaitTermination(5000L, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        this.clientHandler = null;
-        this.stop = true;
-    }
+
+	/**
+	 * The {@link ClientHandler}.
+	 */
+	private ClientHandler clientHandler;
 
 
-    /**
-     * Run & listen on the server port.
-     */
-    private void runServer() throws Exception {
-        ServerSocket server = new ServerSocket(port);
-        server.setSoTimeout(1000);
 
-        System.out.println("Waiting for clients on port: " + port);
-        while (!stop) {
-            try {
-                Socket socket = server.accept();
-                priorityJobScheduler.execute(() -> {
-                    try {
-                        Job newJob = new Job(socket, clientHandler);
-                        priorityQueue.put(newJob);
-                        Job jobToExecute = priorityQueue.take();
-                        if (jobToExecute != null){
-                            System.out.println(priorityJobPoolExecutor);
-                            priorityJobPoolExecutor.execute(jobToExecute);
-                        }
-    //					InputStream inFromClient = socket.getInputStream();
-    //					OutputStream outToClient = socket.getOutputStream();
-    //					clientHandler.handleClient(inFromClient, outToClient);
-    //					inFromClient.close();
-    //					outToClient.close();
-    //					socket.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+	/**
+	 * Indicates whether the server is stopped.
+	 */
+	private volatile boolean stop;
 
 
-            } catch (SocketTimeoutException e) {
+
+	/**
+	 * Creates new {@link MyServer} with the specified port.
+	 */
+	public MyServer(int port, int poolSize){
+		this.port = port;
+		this.poolSize = poolSize;
+	}
+
+
+
+	@Override
+	public void start(ClientHandler clientHandler){
+		this.clientHandler = clientHandler;
+		this.executor = new ThreadPoolExecutor(poolSize, poolSize, 60L, TimeUnit.SECONDS, new PriorityBlockingQueue<>(50, COMPARATOR));
+		this.stop = false;
+
+		new Thread(() -> {
+			try{
+				runServer();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}).start();
+	}
+
+
+
+	@Override
+	public void stop(){
+		shutdown();
+
+		this.clientHandler = null;
+		this.stop = true;
+	}
+
+
+
+	private void shutdown(){
+		this.executor.shutdown();
+
+		try{
+			this.executor.awaitTermination(5, TimeUnit.SECONDS);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		this.executor = null;
+	}
+
+
+
+	/**
+	 * Run & listen on the server port.
+	 */
+	private void runServer() throws Exception{
+		ServerSocket server = new ServerSocket(port);
+		server.setSoTimeout(1000);
+
+		System.out.println("Waiting for clients on port: " + port);
+		while (!stop){
+			try{
+				Socket socket = server.accept();
+
+				executor.execute(new Reader(socket, clientHandler, executor));
+			} catch (SocketTimeoutException e){
 //				e.printStackTrace();
-            }
-        }
+			}
+		}
 
-        server.close();
-        System.out.println("Server closed!");
-    }
+		server.close();
+		System.out.println("Server closed!");
+	}
 
-    private void setExecutor(int poolSize) {
-        final int minPoolSize = 1;
-
-        if (poolSize < minPoolSize) {
-            throw new IllegalArgumentException("Pool size value out of range: " + poolSize);
-        } else {
-            priorityJobPoolExecutor = Executors.newFixedThreadPool(poolSize);
-        }
-    }
-
-    private void priorityQueueInitialization(int queueSize) {
-        final int emptyQueueSize = 0;
-        if (queueSize <= emptyQueueSize) {
-            throw new IllegalArgumentException("Queue size must be greater than 0");
-        }
-        priorityQueue = new PriorityBlockingQueue<Job>(queueSize, Comparator.comparing(Job::getPriority));
-    }
 
 
 }

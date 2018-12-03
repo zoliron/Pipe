@@ -79,4 +79,17 @@ public class IoUtils{
 
 
 
+	/**
+	 * Close the specified closeable safely.
+	 */
+	public static void safeClose(Closeable closeable){
+		try{
+			closeable.close();
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+
+
+
 }

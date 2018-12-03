@@ -30,6 +30,7 @@ public class AStar<S> extends AbstractSearcher<S>{
 		queue.add(initialNode);
 
 		while (!open.values().isEmpty()){
+//			System.out.println("It[" + Thread.currentThread().getName() + "]");
 			incrementIteration();
 
 			SearcherNode<S> node = takePromising(queue, open);
