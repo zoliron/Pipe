@@ -18,7 +18,7 @@ import test.hipster.graph.HipsterGraph;
 
 
 /**
- * @author Yaniv Zolicha
+ * @author Ronen Zolicha
  */
 public class GraphProblem{
 
