@@ -24,7 +24,7 @@ public class PipeDisplayer extends Canvas {
             {'-', 'L', '7', '7', '|', '7', '|', '7' , 'L'},
             {'|', '-', '7', '7', '|', 'F', '|', '|' , 'L'},
             {'F', 'F', '7', '7', '|', '7', '7', '7' , '7'},
-            {'F', 'L', '-', '-', 'L', '-', '-', '-' , 'g'},
+            {'L', 'F', '7', 'J', 'L', '-', '-', '-' , 'g'},
     };
 
     private StringProperty startFileName;
@@ -143,8 +143,8 @@ public class PipeDisplayer extends Canvas {
             pipeVerticalImage = new Image(getClass().getResource(verticalPipeFileName.get()).openStream());
 
             ImageView imageView = new ImageView(pipeVerticalImage);
-            // We rotate 270 degrees to get the initial state
-            imageView.setRotate(270);
+            // We rotate 90 degrees to get the horizontal state
+            imageView.setRotate(90);
             pipeHorizontalImage = imageView.snapshot(params, null);
 
             pipe0DegreeImage = new Image(getClass().getResource(angledPipeFileName.get()).openStream());
@@ -178,16 +178,16 @@ public class PipeDisplayer extends Canvas {
                     Image pipeImage;
                     switch (pipeData[column][row]) {
                         case 'L':
-                            pipeImage = pipe0DegreeImage;
-                            break;
-                        case 'F':
-                            pipeImage = pipe90DegreeImage;
-                            break;
-                        case '7':
                             pipeImage = pipe180DegreeImage;
                             break;
-                        case 'J':
+                        case 'F':
                             pipeImage = pipe270DegreeImage;
+                            break;
+                        case '7':
+                            pipeImage = pipe0DegreeImage;
+                            break;
+                        case 'J':
+                            pipeImage = pipe90DegreeImage;
                             break;
                         case '-':
                             pipeImage = pipeHorizontalImage;
