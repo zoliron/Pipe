@@ -1,6 +1,5 @@
 package client_desktop.model;
 
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
@@ -20,10 +19,9 @@ public class PipeGameModel implements GameModel {
     public IntegerProperty timePassed;
     public char[][] clean;
     private Socket serverSocket;
-    public ListProperty<char[]> board;
+    public ListProperty<char[]> pipeGameBoard;
     private Point startPosition = null;
     private Point goalPosition = null;
-    private ListProperty<Point> points;
 
     Timer timer = new Timer();
     TimerTask task = new TimerTask() {
@@ -35,9 +33,9 @@ public class PipeGameModel implements GameModel {
     };
 
     public PipeGameModel() {
-        this.board = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
-        this.board.addListener((ObservableValue,s,t1) ->{
-            char[][] cells = this.board.toArray(new char[this.board.size()][]);
+        this.pipeGameBoard = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
+        this.pipeGameBoard.addListener((ObservableValue, s, t1) ->{
+            char[][] cells = this.pipeGameBoard.toArray(new char[this.pipeGameBoard.size()][]);
             for(int i=0; i < cells.length; i++) {
                 for(int j=0; j< cells[i].length; j++) {
                     if (cells[i][j] == 's')
@@ -48,13 +46,13 @@ public class PipeGameModel implements GameModel {
             }
 
             if (startPosition != null) {
-                points.clear();
+                passedPipes.clear();
                 isGoalState.set(isGoalStateCheck(startPosition, goalPosition));
             }
         });
 
         this.isGoalState = new SimpleBooleanProperty();
-        this.points = new SimpleListProperty<>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
+        this.passedPipes = new SimpleListProperty<>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
         this.stepsNumber = new SimpleIntegerProperty(0);
         this.timePassed = new SimpleIntegerProperty(0);
         this.timer.scheduleAtFixedRate(task, 1000,  1000);
@@ -85,41 +83,41 @@ public class PipeGameModel implements GameModel {
 
     public boolean isTopPossible(Point cell) {
         if (getTop(cell) != null) {
-            switch (board.get(cell.y)[cell.x]) {
+            switch (pipeGameBoard.get(cell.y)[cell.x]) {
                 case '|':
-                    if ((board.get(cell.y -1)[cell.x] == '|') ||
-                            (board.get(cell.y -1)[cell.x] == '7') ||
-                            (board.get(cell.y -1)[cell.x] == 'F') ||
-                            (board.get(cell.y -1)[cell.x] == 's') ||
-                            (board.get(cell.y -1)[cell.x] == 'g'))
+                    if ((pipeGameBoard.get(cell.y -1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == '7') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'F') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 's') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'g'))
                         return true;
                     return false;
                 case 'J':
-                    if ((board.get(cell.y -1)[cell.x] == '|') ||
-                            (board.get(cell.y -1)[cell.x] == '7') ||
-                            (board.get(cell.y -1)[cell.x] == 'F') ||
-                            (board.get(cell.y -1)[cell.x] == 's') ||
-                            (board.get(cell.y -1)[cell.x] == 'g'))
+                    if ((pipeGameBoard.get(cell.y -1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == '7') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'F') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 's') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'g'))
                         return true;
                     return false;
                 case 'L':
-                    if ((board.get(cell.y -1)[cell.x] == '|') ||
-                            (board.get(cell.y -1)[cell.x] == '7') ||
-                            (board.get(cell.y -1)[cell.x] == 'F') ||
-                            (board.get(cell.y -1)[cell.x] == 's') ||
-                            (board.get(cell.y -1)[cell.x] == 'g'))
+                    if ((pipeGameBoard.get(cell.y -1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == '7') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'F') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 's') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'g'))
                         return true;
                     return false;
                 case 's':
-                    if ((board.get(cell.y -1)[cell.x] == '|') ||
-                            (board.get(cell.y -1)[cell.x] == '7') ||
-                            (board.get(cell.y -1)[cell.x] == 'F'))
+                    if ((pipeGameBoard.get(cell.y -1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == '7') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'F'))
                         return true;
                     return false;
                 case 'g':
-                    if ((board.get(cell.y -1)[cell.x] == '|') ||
-                            (board.get(cell.y -1)[cell.x] == '7') ||
-                            (board.get(cell.y -1)[cell.x] == 'F'))
+                    if ((pipeGameBoard.get(cell.y -1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == '7') ||
+                            (pipeGameBoard.get(cell.y -1)[cell.x] == 'F'))
                         return true;
                     return false;
 
@@ -132,41 +130,41 @@ public class PipeGameModel implements GameModel {
 
     public boolean isBottomPossible(Point cell) {
         if (getBottom(cell) != null) {
-            switch (board.get(cell.y)[cell.x]) {
+            switch (pipeGameBoard.get(cell.y)[cell.x]) {
                 case '|':
-                    if ((board.get(cell.y +1)[cell.x] == '|') ||
-                            (board.get(cell.y +1)[cell.x] == 'J') ||
-                            (board.get(cell.y +1)[cell.x] == 'L') ||
-                            (board.get(cell.y +1)[cell.x] == 's') ||
-                            (board.get(cell.y +1)[cell.x] == 'g'))
+                    if ((pipeGameBoard.get(cell.y +1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'J') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'L') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 's') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'g'))
                         return true;
                     return false;
                 case 'F':
-                    if ((board.get(cell.y +1)[cell.x] == '|') ||
-                            (board.get(cell.y +1)[cell.x] == 'J') ||
-                            (board.get(cell.y +1)[cell.x] == 'L') ||
-                            (board.get(cell.y +1)[cell.x] == 's') ||
-                            (board.get(cell.y +1)[cell.x] == 'g'))
+                    if ((pipeGameBoard.get(cell.y +1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'J') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'L') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 's') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'g'))
                         return true;
                     return false;
                 case '7':
-                    if ((board.get(cell.y +1)[cell.x] == '|') ||
-                            (board.get(cell.y +1)[cell.x] == 'J') ||
-                            (board.get(cell.y +1)[cell.x] == 'L') ||
-                            (board.get(cell.y +1)[cell.x] == 's') ||
-                            (board.get(cell.y +1)[cell.x] == 'g'))
+                    if ((pipeGameBoard.get(cell.y +1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'J') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'L') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 's') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'g'))
                         return true;
                     return false;
                 case 's':
-                    if ((board.get(cell.y +1)[cell.x] == '|') ||
-                            (board.get(cell.y +1)[cell.x] == 'J') ||
-                            (board.get(cell.y +1)[cell.x] == 'L'))
+                    if ((pipeGameBoard.get(cell.y +1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'J') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'L'))
                         return true;
                     return false;
                 case 'g':
-                    if ((board.get(cell.y +1)[cell.x] == '|') ||
-                            (board.get(cell.y +1)[cell.x] == 'J') ||
-                            (board.get(cell.y +1)[cell.x] == 'L'))
+                    if ((pipeGameBoard.get(cell.y +1)[cell.x] == '|') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'J') ||
+                            (pipeGameBoard.get(cell.y +1)[cell.x] == 'L'))
                         return true;
                     return false;
 
@@ -179,41 +177,41 @@ public class PipeGameModel implements GameModel {
 
     public boolean isLeftPossible(Point cell) {
         if (getLeft(cell) != null) {
-            switch (board.get(cell.y)[cell.x]) {
+            switch (pipeGameBoard.get(cell.y)[cell.x]) {
                 case '-':
-                    if ((board.get(cell.y)[cell.x -1] == '-') ||
-                            (board.get(cell.y)[cell.x -1] == 'F') ||
-                            (board.get(cell.y)[cell.x -1] == 'L') ||
-                            (board.get(cell.y)[cell.x -1] == 's') ||
-                            (board.get(cell.y)[cell.x -1] == 'g'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x -1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'F') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'L') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 's') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'g'))
                         return true;
                     return false;
                 case '7':
-                    if ((board.get(cell.y)[cell.x -1] == '-') ||
-                            (board.get(cell.y)[cell.x -1] == 'F') ||
-                            (board.get(cell.y)[cell.x -1] == 'L') ||
-                            (board.get(cell.y)[cell.x -1] == 's') ||
-                            (board.get(cell.y)[cell.x -1] == 'g'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x -1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'F') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'L') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 's') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'g'))
                         return true;
                     return false;
                 case 'J':
-                    if ((board.get(cell.y)[cell.x -1] == '-') ||
-                            (board.get(cell.y)[cell.x -1] == 'F') ||
-                            (board.get(cell.y)[cell.x -1] == 'L') ||
-                            (board.get(cell.y)[cell.x -1] == 's') ||
-                            (board.get(cell.y)[cell.x -1] == 'g'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x -1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'F') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'L') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 's') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'g'))
                         return true;
                     return false;
                 case 's':
-                    if ((board.get(cell.y)[cell.x -1] == '-') ||
-                            (board.get(cell.y)[cell.x -1] == 'F') ||
-                            (board.get(cell.y)[cell.x -1] == 'L'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x -1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'F') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'L'))
                         return true;
                     return false;
                 case 'g':
-                    if ((board.get(cell.y)[cell.x -1] == '-') ||
-                            (board.get(cell.y)[cell.x -1] == 'F') ||
-                            (board.get(cell.y)[cell.x -1] == 'L'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x -1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'F') ||
+                            (pipeGameBoard.get(cell.y)[cell.x -1] == 'L'))
                         return true;
                     return false;
 
@@ -226,41 +224,41 @@ public class PipeGameModel implements GameModel {
 
     public boolean isRightPossible(Point cell) {
         if (getLeft(cell) != null) {
-            switch (board.get(cell.y)[cell.x]) {
+            switch (pipeGameBoard.get(cell.y)[cell.x]) {
                 case '-':
-                    if ((board.get(cell.y)[cell.x +1] == '-') ||
-                            (board.get(cell.y)[cell.x +1] == 'J') ||
-                            (board.get(cell.y)[cell.x +1] == '7') ||
-                            (board.get(cell.y)[cell.x +1] == 's') ||
-                            (board.get(cell.y)[cell.x +1] == 'g'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x +1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'J') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == '7') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 's') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'g'))
                         return true;
                     return false;
                 case 'F':
-                    if ((board.get(cell.y)[cell.x +1] == '-') ||
-                            (board.get(cell.y)[cell.x +1] == 'J') ||
-                            (board.get(cell.y)[cell.x +1] == '7') ||
-                            (board.get(cell.y)[cell.x +1] == 's') ||
-                            (board.get(cell.y)[cell.x +1] == 'g'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x +1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'J') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == '7') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 's') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'g'))
                         return true;
                     return false;
                 case 'L':
-                    if ((board.get(cell.y)[cell.x +1] == '-') ||
-                            (board.get(cell.y)[cell.x +1] == 'J') ||
-                            (board.get(cell.y)[cell.x +1] == '7') ||
-                            (board.get(cell.y)[cell.x +1] == 's') ||
-                            (board.get(cell.y)[cell.x +1] == 'g'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x +1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'J') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == '7') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 's') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'g'))
                         return true;
                     return false;
                 case 's':
-                    if ((board.get(cell.y)[cell.x +1] == '-') ||
-                            (board.get(cell.y)[cell.x +1] == 'J') ||
-                            (board.get(cell.y)[cell.x +1] == '7'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x +1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'J') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == '7'))
                         return true;
                     return false;
                 case 'g':
-                    if ((board.get(cell.y)[cell.x +1] == '-') ||
-                            (board.get(cell.y)[cell.x +1] == 'J') ||
-                            (board.get(cell.y)[cell.x +1] == '7'))
+                    if ((pipeGameBoard.get(cell.y)[cell.x +1] == '-') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == 'J') ||
+                            (pipeGameBoard.get(cell.y)[cell.x +1] == '7'))
                         return true;
                     return false;
                 default:
@@ -280,7 +278,7 @@ public class PipeGameModel implements GameModel {
 
     public Point getBottom(Point current) {
         Point temp = null;
-        if(current.y < this.board.size() - 1)
+        if(current.y < this.pipeGameBoard.size() - 1)
             temp = new Point((int)current.getX(), (int)current.getY() + 1);
 
         return temp;
@@ -296,13 +294,13 @@ public class PipeGameModel implements GameModel {
 
     public Point getRight(Point current) {
         Point temp = null;
-        if(current.x < this.board.get(0).length - 1)
+        if(current.x < this.pipeGameBoard.get(0).length - 1)
             temp = new Point((int)current.getX() +1, (int)current.getY());
 
         return temp;
     }
 
-    public void InitBoard() {
+    public void initBoard() {
         char[][] level = {
                 {'s','F',' ','-','L'},
                 {' ','J','J','-','L'},
@@ -311,38 +309,50 @@ public class PipeGameModel implements GameModel {
         };
 
         setCleanBoard(level);
-        this.board.addAll(level);
+        this.pipeGameBoard.addAll(level);
     }
 
-    public void rotateCell(int row, int col) {
-        switch(this.board.get(row)[col]) {
-            case 'L':
-                this.board.get(row)[col] = 'F';
-                break;
-            case 'F':
-                this.board.get(row)[col] = '7';
+    public void rotateCell(int x, int y) {
+        switch (this.pipeGameBoard.get(y)[x]) {
+            case '-':
+                this.pipeGameBoard.get(y)[x] = '|';
+                stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case '7':
-                this.board.get(row)[col] = 'J';
+                this.pipeGameBoard.get(y)[x] = 'J';
+                stepsNumber.set(stepsNumber.get() + 1);
+                break;
+            case 'F':
+                this.pipeGameBoard.get(y)[x] = '7';
+                stepsNumber.set(stepsNumber.get() + 1);
+                break;
+            case 'L':
+                this.pipeGameBoard.get(y)[x] = 'F';
+                stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case 'J':
-                this.board.get(row)[col] = 'L';
-                break;
-            case '-':
-                this.board.get(row)[col] = '|';
+                this.pipeGameBoard.get(y)[x] = 'L';
+                stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case '|':
-                this.board.get(row)[col] = '-';
+                this.pipeGameBoard.get(y)[x] = '-';
+                stepsNumber.set(stepsNumber.get() + 1);
+                break;
+
+            case ' ':
+                this.pipeGameBoard.get(y)[x] = ' ';
+                break;
+            case 's':
+                this.pipeGameBoard.get(y)[x] = 's';
+                break;
+            case 'g':
+                this.pipeGameBoard.get(y)[x] = 'g';
                 break;
             default:
+                this.pipeGameBoard.get(y)[x] = ' ';
                 break;
         }
-
-        if(this.board.get(row)[col] == 'F' || this.board.get(row)[col] == 'L' ||
-                this.board.get(row)[col] == 'J' || this.board.get(row)[col] == '7' ||
-                this.board.get(row)[col] == '-' || this.board.get(row)[col] == '|') {
-            stepsNumber.set(stepsNumber.get() + 1);
-        }
+        this.pipeGameBoard.set(y, this.pipeGameBoard.get(y));
     }
 
     public void loadGame(String fileName) {
@@ -369,7 +379,7 @@ public class PipeGameModel implements GameModel {
     public void reset() {
         timePassed.set(0);
         stepsNumber.set(0);
-        this.board.setAll(getCleanBoard());
+        this.pipeGameBoard.setAll(getCleanBoard());
     }
 
     public void setCleanBoard(char[][] board) {

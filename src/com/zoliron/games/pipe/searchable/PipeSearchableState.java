@@ -20,7 +20,7 @@ public class PipeSearchableState{
 
 
 	/**
-	 * The state's board.
+	 * The state's pipeGameBoard.
 	 */
 	private final PipeBoard board;
 
@@ -34,14 +34,14 @@ public class PipeSearchableState{
 
 
 	/**
-	 * All reachable points from the board source point.
+	 * All reachable points from the pipeGameBoard source point.
 	 */
 	private final Set<Point> reachablePointsFromSource;
 
 
 
 	/**
-	 * Creates new {@link PipeSearchableState} with the specified board and action.
+	 * Creates new {@link PipeSearchableState} with the specified pipeGameBoard and action.
 	 */
 	PipeSearchableState(PipeBoard board, Point action){
 		this.board = board;
@@ -52,7 +52,7 @@ public class PipeSearchableState{
 
 
 	/**
-	 * Returns the state's board.
+	 * Returns the state's pipeGameBoard.
 	 */
 	public PipeBoard getBoard(){
 		return board;
@@ -70,7 +70,7 @@ public class PipeSearchableState{
 
 
 	/**
-	 * Returns all the reachable points from the board source point.
+	 * Returns all the reachable points from the pipeGameBoard source point.
 	 */
 	public Set<Point> getReachablePointsFromSource(){
 		return reachablePointsFromSource;
@@ -106,7 +106,7 @@ public class PipeSearchableState{
 
 
 	/**
-	 * Calculate all the reachable points from the board's source point.
+	 * Calculate all the reachable points from the pipeGameBoard's source point.
 	 */
 	private static Set<Point> calculateReachablePointsFromSource(PipeBoard board){
 		Set<Point> reachablePointsFromSource = new HashSet<>();

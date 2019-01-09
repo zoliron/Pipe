@@ -22,14 +22,14 @@ public class PipeSearchable implements Searchable<PipeSearchableState>{
 
 
 	/**
-	 * The initial board.
+	 * The initial pipeGameBoard.
 	 */
 	private final PipeBoard initial;
 
 
 
 	/**
-	 * Creates new {@link PipeSearchable} with the initial board.
+	 * Creates new {@link PipeSearchable} with the initial pipeGameBoard.
 	 */
 	public PipeSearchable(PipeBoard initial){
 		this.initial = initial;

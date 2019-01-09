@@ -20,14 +20,7 @@ import javafx.scene.paint.Color;
 
 public class PipeDisplayer extends Canvas {
 
-    char [][] pipeData = {
-            {'s', '-', '-', '-', '7', '7', '-', '|' , 'F'},
-            {'-', '7', '7', '7', '|', 'L', '-', 'F' , '7'},
-            {'-', 'L', '7', '7', '|', '7', '|', '7' , 'L'},
-            {'|', '-', '7', '7', '|', 'F', '|', '|' , 'L'},
-            {'F', 'F', '7', '7', '|', '7', '7', '7' , '7'},
-            {'L', 'F', '7', 'J', 'L', '-', '-', '-' , 'g'},
-    };
+    char [][] pipeData;
 
     private StringProperty startFileName;
     private StringProperty goalFileName;

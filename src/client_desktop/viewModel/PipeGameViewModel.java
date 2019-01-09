@@ -11,17 +11,17 @@ import java.io.File;
 
 public class PipeGameViewModel {
 
-    public ListProperty<char[]> board;
+    public ListProperty<char[]> pipeGameBoard;
     public BooleanProperty isGoal;
     public ListProperty<Point> passedPipes;
     public IntegerProperty stepsNumber;
     public IntegerProperty timePassed;
     PipeGameModel pipeGameModel;
 
-    public PipeGameViewModel(PipeGameModel m) {
-        this.pipeGameModel = m;
-        this.board = new SimpleListProperty<>();
-        this.board.bind(this.pipeGameModel.board);
+    public PipeGameViewModel(PipeGameModel pipeGameModel) {
+        this.pipeGameModel = pipeGameModel;
+        this.pipeGameBoard = new SimpleListProperty<>();
+        this.pipeGameBoard.bind(this.pipeGameModel.pipeGameBoard);
         this.isGoal = new SimpleBooleanProperty();
         this.isGoal.bind(this.pipeGameModel.isGoalState);
         this.passedPipes = new SimpleListProperty<>();
@@ -34,7 +34,7 @@ public class PipeGameViewModel {
         this.timePassed.bind(this.pipeGameModel.timePassed);
     }
 
-    public void changePipe(int x, int y) {
+    public void rotateCell(int x, int y) {
         this.pipeGameModel.rotateCell(x, y);
     }
 

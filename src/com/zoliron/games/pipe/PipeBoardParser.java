@@ -18,7 +18,7 @@ public class PipeBoardParser{
 
 
 	/**
-	 * Parse the specified board.
+	 * Parse the specified pipeGameBoard.
 	 */
 	public PipeBoard parse(String problem){
 		List<String> rawBoard = Arrays.asList(problem.split("\n"));

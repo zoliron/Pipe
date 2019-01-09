@@ -8,7 +8,7 @@ import java.util.Objects;
 
 
 /**
- * Encapsulate the pipe game board.
+ * Encapsulate the pipe game pipeGameBoard.
  *
  * @author Ronen Zolicha
  */
@@ -17,7 +17,7 @@ public class PipeBoard implements Cloneable{
 
 
 	/**
-	 * The {@link PipeCell}s' board.
+	 * The {@link PipeCell}s' pipeGameBoard.
 	 */
 	private final PipeCell[][] board;
 
@@ -49,7 +49,7 @@ public class PipeBoard implements Cloneable{
 
 
 	/**
-	 * Creates new deep copy {@link PipeBoard} from other board.
+	 * Creates new deep copy {@link PipeBoard} from other pipeGameBoard.
 	 */
 	public PipeBoard(PipeBoard other){
 		int rowCount = other.getRowCount();
@@ -67,7 +67,7 @@ public class PipeBoard implements Cloneable{
 
 
 	/**
-	 * Returns the board row count.
+	 * Returns the pipeGameBoard row count.
 	 */
 	public int getRowCount(){
 		return board.length;
@@ -76,7 +76,7 @@ public class PipeBoard implements Cloneable{
 
 
 	/**
-	 * Returns the board column count.
+	 * Returns the pipeGameBoard column count.
 	 */
 	public int getColumnCount(){
 		return board[0].length;

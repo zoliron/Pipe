@@ -36,14 +36,14 @@ public class EightPuzzle implements Iterable<Point>{
 
 
 	/**
-	 * The puzzle board.
+	 * The puzzle pipeGameBoard.
 	 */
 	private final String[][] board;
 
 
 
 	/**
-	 * Creates new {@link EightPuzzle} with the specified board.
+	 * Creates new {@link EightPuzzle} with the specified pipeGameBoard.
 	 */
 	public EightPuzzle(String[][] board){
 		this.board = board;
@@ -129,7 +129,7 @@ public class EightPuzzle implements Iterable<Point>{
 
 
 	/**
-	 * Deep copy the specified board.
+	 * Deep copy the specified pipeGameBoard.
 	 */
 	public EightPuzzle deepCopy(){
 		String[][] copy = new String[COLUMN_COUNT][ROW_COUNT];

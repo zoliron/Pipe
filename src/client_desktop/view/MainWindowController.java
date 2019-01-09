@@ -1,5 +1,6 @@
 package client_desktop.view;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,9 +11,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import client_desktop.viewModel.PipeGameViewModel;
+import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
@@ -20,18 +23,20 @@ public class MainWindowController implements Initializable {
 
     String currentTheme;
     PipeGameViewModel pipeGameViewModel;
-
-    char [][] pipeData = {
-            {'s', '-', '-', '-', '7', '7', '-', '|' , 'F'},
-            {'-', '7', '7', '7', '|', 'L', '-', 'F' , '7'},
-            {'-', 'L', '7', '7', '|', '7', '|', '7' , 'L'},
-            {'|', '-', '7', '7', '|', 'F', '|', '|' , 'L'},
-            {'F', 'F', '7', '7', '|', '7', '7', '7' , '7'},
-            {'F', 'L', '-', '-', 'L', '-', '-', '-' , 'g'},
-    };
+    ListProperty<Point> passedPipes;
+    BooleanProperty isGoalState;
+    IntegerProperty stepsNumber;
+    ListProperty<char[]> pipeGameBoard;
+    IntegerProperty timePassed;
 
     @FXML
     PipeDisplayer pipeDisplayer;
+    @FXML
+    javafx.scene.control.TextField stepsText;
+    @FXML
+    javafx.scene.control.TextField secondsText;
+    @FXML
+    Label connectionStatus;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,6 +52,47 @@ public class MainWindowController implements Initializable {
 
     public void setViewModel(PipeGameViewModel pipeGameViewModel) {
         this.pipeGameViewModel = pipeGameViewModel;
+        this.pipeGameBoard = new SimpleListProperty<>();
+        this.pipeGameBoard.bind(this.pipeGameViewModel.pipeGameBoard);
+        this.pipeGameBoard.addListener((observableValue, s, t1) -> {
+            pipeDisplayer.setPipeData(this.pipeGameBoard.toArray(new char[this.pipeGameBoard.size()][]));
+        });
+        this.isGoalState = new SimpleBooleanProperty();
+        this.isGoalState.bind(this.pipeGameViewModel.isGoal);
+        this.isGoalState.addListener((observableValue, s, t1) -> {
+            if (isGoalState.get() == true) {
+                System.out.println("You won !");
+            }
+        });
+        this.passedPipes = new SimpleListProperty<Point>();
+        this.passedPipes.bind(this.pipeGameViewModel.passedPipes);
+        this.passedPipes.addListener((observableValue, s, t1) -> {
+            pipeDisplayer.setPassedPipes(this.passedPipes);
+        });
+
+        // Enables clicks for the pipes to rotate
+        pipeDisplayer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                (MouseEvent t) -> {
+                    double w = pipeDisplayer.getWidth() / pipeGameBoard.get(0).length;
+                    double h = pipeDisplayer.getHeight() / pipeGameBoard.size();
+                    int x = (int) (t.getX() / w);
+                    int y = (int) (t.getY() / h);
+                    pipeGameViewModel.rotateCell(x, y);
+                }
+        );
+
+        this.stepsNumber = new SimpleIntegerProperty();
+        this.stepsNumber.bindBidirectional(this.pipeGameViewModel.stepsNumber);
+        this.stepsNumber.addListener((observableValue, s, t1) -> {
+            this.stepsText.setText(Integer.toString(stepsNumber.get()));
+        });
+        this.connectionStatus.setText("Server Disconnected");
+
+        this.timePassed = new SimpleIntegerProperty();
+        this.timePassed.bind(this.pipeGameViewModel.timePassed);
+        this.timePassed.addListener((observableValue, s, t1) -> {
+            this.secondsText.setText(Integer.toString(timePassed.get()));
+        });
     }
 
     public void start() {

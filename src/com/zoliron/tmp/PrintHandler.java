@@ -71,7 +71,7 @@ public class PrintHandler implements ClientHandler{
 //			List<State<PipeState>> states = p.getAllPossibleStates(p.getInitialState());
 //			for (State<PipeState> state : states){
 //				System.out.println("\n\n\n\n");
-//				System.out.println(state.getStateObject().board);
+//				System.out.println(state.getStateObject().pipeGameBoard);
 //			}
 
 		} catch (Exception e){

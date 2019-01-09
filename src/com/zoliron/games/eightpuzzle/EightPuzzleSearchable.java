@@ -19,7 +19,7 @@ public class EightPuzzleSearchable implements Searchable<EightPuzzleState>{
 
 
 	/**
-	 * The initial board.
+	 * The initial pipeGameBoard.
 	 */
 	private final EightPuzzle puzzle;
 
