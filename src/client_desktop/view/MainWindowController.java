@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client_desktop.viewModel.PipeGameViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +19,7 @@ import javafx.stage.FileChooser;
 public class MainWindowController implements Initializable {
 
     String currentTheme;
+    PipeGameViewModel pipeGameViewModel;
 
     char [][] pipeData = {
             {'s', '-', '-', '-', '7', '7', '-', '|' , 'F'},
@@ -41,6 +43,10 @@ public class MainWindowController implements Initializable {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setViewModel(PipeGameViewModel pipeGameViewModel) {
+        this.pipeGameViewModel = pipeGameViewModel;
     }
 
     public void start() {
