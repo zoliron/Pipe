@@ -8,12 +8,14 @@ import java.io.IOException;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.Bloom;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class PipeDisplayer extends Canvas {
@@ -155,6 +157,9 @@ public class PipeDisplayer extends Canvas {
         this.backgroundFileName.setValue(background);
     }
 
+    public void setPassedPipes(ListProperty<Point> passedPipes) {
+        this.passedPipes = passedPipes;
+    }
 
     public void setPipeData(char[][] pipeData) {
         if (pipeData != null) {
@@ -263,7 +268,4 @@ public class PipeDisplayer extends Canvas {
         }
     }
 
-    public void setFlowPoints(ListProperty<Point> flowPoints) {
-        this.passedPipes = passedPipes;
-    }
 }
