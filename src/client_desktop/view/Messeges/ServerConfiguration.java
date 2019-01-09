@@ -13,7 +13,7 @@ import java.util.List;
 public class ServerConfiguration implements NakedObject {
 
     // Default values here
-    public String serverIp = "127.0.0.1";
-    public String serverPort = "6400";
+    public String ServerIP = "127.0.0.1";
+    public String ServerPort = "6400";
 
 }

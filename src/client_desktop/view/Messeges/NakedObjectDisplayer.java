@@ -32,14 +32,24 @@ public class NakedObjectDisplayer {
         dialog.show();
     }
 
+    private StringProperty createDisplayForField(String fieldName, String fieldValue) {
+        //create UI element and bind to it using the NakedObject methods - this I'm leaving to you :)
+        //This should obviously involve JavaFX code.
+        Text caption = new Text(fieldName);
+        caption.setStyle("-fx-font: 18 david;");
+        this.dialogVbox.getChildren().add(caption);
+        javafx.scene.control.TextField textBox = new javafx.scene.control.TextField(fieldValue);
+        textBox.setStyle("-fx-font: 18 david;");
+        this.dialogVbox.getChildren().add(textBox);
+        return textBox.textProperty();
+    }
+
+    // Display NakedObject
     public void display(NakedObject obj) {
-
         final Stage dialog = this.displayConstructor();
-
         Field[] fields = obj.getClass().getFields();
         this.dialogVbox = new VBox(fields.length * 10);
         dialogVbox.setPadding(new javafx.geometry.Insets(10, 10, 10, 10));
-
         List<StringProperty> textPropertyList = new ArrayList<>();
         for (Field field : fields) {
             try {
@@ -50,7 +60,7 @@ public class NakedObjectDisplayer {
         }
         javafx.scene.control.Button saveButton = new javafx.scene.control.Button();
         saveButton.setText("Apply");
-        saveButton.setStyle("-fx-font: 16 arial;");
+        saveButton.setStyle("-fx-font: 18 david;");
         saveButton.setOnAction(value -> {
             for (int i = 0; i < fields.length; i++) {
                 try {
@@ -60,63 +70,37 @@ public class NakedObjectDisplayer {
             }
             dialog.close();
         });
-
         this.dialogVbox.getChildren().add(saveButton);
-
         displayDistructor(dialog, this.dialogVbox);
     }
 
-    private StringProperty createDisplayForField(String fieldName, String fieldValue) {
-        //create UI element and bind to it using the NakedObject methods - this I'm leaving to you :)
-        //This should obviously involve JavaFX code.
-        Text caption = new Text(fieldName);
-        caption.setStyle("-fx-font: 16 arial;");
-        this.dialogVbox.getChildren().add(caption);
-        javafx.scene.control.TextField textBox = new javafx.scene.control.TextField(fieldValue);
-        textBox.setStyle("-fx-font: 16 arial;");
-        this.dialogVbox.getChildren().add(textBox);
-        return textBox.textProperty();
-    }
-
     public void display(NakedMessage obj) {
-
         final Stage dialog = this.displayConstructor();
-
         this.dialogVbox = new VBox(obj.getMessageList().size() * 10);
         dialogVbox.setPadding(new javafx.geometry.Insets(10, 10, 10, 10));
-
         for (String message : obj.getMessageList()) {
             Text caption = new Text(message);
-            caption.setStyle("-fx-font: 16 arial;");
+            caption.setStyle("-fx-font: 18 david;");
             this.dialogVbox.getChildren().add(caption);
         }
-
         javafx.scene.control.Button saveButton = new Button();
         saveButton.setText("OK");
-        saveButton.setStyle("-fx-font: 16 arial;");
+        saveButton.setStyle("-fx-font: 18 david;");
         saveButton.setOnAction(value -> dialog.close());
-
         this.dialogVbox.getChildren().add(saveButton);
-
         displayDistructor(dialog, this.dialogVbox);
     }
 
     public ComboBox<String> display(NakedList obj) {
-
         final Stage dialog = this.displayConstructor();
-
         this.dialogVbox = new VBox(10);
         dialogVbox.setPadding(new Insets(10, 10, 10, 10));
-
         Text caption = new Text("Choose:");
-        caption.setStyle("-fx-font: 16 arial;");
+        caption.setStyle("-fx-font: 18 david;");
         this.dialogVbox.getChildren().add(caption);
-
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setItems(obj.getOptions());
-
         this.dialogVbox.getChildren().add(comboBox);
-
         displayDistructor(dialog, this.dialogVbox);
         return comboBox;
     }

@@ -1,7 +1,25 @@
 package client_desktop.view.Messeges;
 
-public class ThemeConfiguration implements NakedObject {
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-    // Default theme name
-    public String theme = "plants";
+public class ThemeConfiguration implements NakedList {
+
+    // Default values here
+    private ObservableList<String> options;
+
+    public ThemeConfiguration() {
+        this.options = FXCollections.observableArrayList("plants");
+    }
+
+    @Override
+    public ObservableList<String> getOptions() {
+        return this.options;
+    }
+
+    @Override
+    public void setOptions(ObservableList<String> list) {
+        this.options = list;
+    }
 }
+

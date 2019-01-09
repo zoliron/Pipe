@@ -16,17 +16,22 @@ import client_desktop.view.Messeges.ThemeConfiguration;
 import client_desktop.view.Messeges.ServerConfiguration;
 import client_desktop.viewModel.PipeGameViewModel;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class MainWindowController implements Initializable {
 
@@ -37,6 +42,9 @@ public class MainWindowController implements Initializable {
     IntegerProperty stepsNumber;
     ListProperty<char[]> pipeGameBoard;
     IntegerProperty timePassed;
+    String gameMusic;
+    AudioClip music;
+
 
     NakedObjectDisplayer nakedObjectDisplayer = new NakedObjectDisplayer();
     ServerConfiguration serverConfiguration = new ServerConfiguration();
@@ -72,13 +80,14 @@ public class MainWindowController implements Initializable {
         });
         this.isGoalState = new SimpleBooleanProperty();
         this.isGoalState.bind(this.pipeGameViewModel.isGoalState);
+        // Listener to check if we reached to goal state
         this.isGoalState.addListener((observableValue, s, t1) -> {
             if (isGoalState.get() == true) {
                 System.out.println("You won !");
-                NakedMessage newMessege = new NakedMessage("Congratulations");
-                newMessege.addMessage("Time Passed: " + timePassed.get());
-                newMessege.addMessage("Moves Count: " + stepsNumber.get());
-                nakedObjectDisplayer.display(newMessege);
+                NakedMessage newMessage = new NakedMessage("Congratulations");
+                newMessage.addMessage("Time Passed: " + timePassed.get());
+                newMessage.addMessage("Moves Count: " + stepsNumber.get());
+                nakedObjectDisplayer.display(newMessage);
             }
         });
         this.passedPipes = new SimpleListProperty<Point>();
@@ -173,14 +182,14 @@ public class MainWindowController implements Initializable {
         pipeDisplayer.setAngledPipeFileName("/client_desktop/resources/" + themeName + "/pipeAngle.png");
         pipeDisplayer.setVerticalPipeFileName("/client_desktop/resources/" + themeName + "/pipeVertical.png");
         this.currentTheme = themeName;
-        // Configure the music path
+        this.gameMusic = "/client_desktop/resources/" + themeName + "/music.mp3";
         try {
             pipeDisplayer.imagesInit();
         } catch (IOException e) {
             e.printStackTrace();
         }
         pipeDisplayer.boardDraw();
-        // Start the music
+        this.playMusic();
     }
 
 
@@ -188,13 +197,26 @@ public class MainWindowController implements Initializable {
         nakedObjectDisplayer.display(this.serverConfiguration);
     }
 
-    public void themeConfig(ActionEvent actionEvent) {
-
+    public void themeConfig() {
+        ComboBox<String> comboBox = nakedObjectDisplayer.display(this.themeConfiguration);
+        comboBox.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends String> observable,
+                 String oldValue, String newValue) -> changeTheme(newValue));
     }
 
+    void playMusic() {
+        if (null != this.music) {
+            music.stop();
+        }
+        this.music = new AudioClip(getClass().getResource(this.gameMusic).toExternalForm());
+        music.setCycleCount(INDEFINITE);
+        music.play();
+    }
     public void solve(ActionEvent actionEvent) {
     }
 
     public void reset(ActionEvent actionEvent) {
     }
+
+
 }
