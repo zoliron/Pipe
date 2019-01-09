@@ -18,7 +18,14 @@ import javafx.scene.paint.Color;
 
 public class PipeDisplayer extends Canvas {
 
-    char[][] pipeData;
+    char [][] pipeData = {
+            {'s', '-', '-', '-', '7', '7', '-', '|' , 'F'},
+            {'-', '7', '7', '7', '|', 'L', '-', 'F' , '7'},
+            {'-', 'L', '7', '7', '|', '7', '|', '7' , 'L'},
+            {'|', '-', '7', '7', '|', 'F', '|', '|' , 'L'},
+            {'F', 'F', '7', '7', '|', '7', '7', '7' , '7'},
+            {'F', 'L', '-', '-', 'L', '-', '-', '-' , 'g'},
+    };
 
     private StringProperty startFileName;
     private StringProperty goalFileName;
@@ -217,5 +224,9 @@ public class PipeDisplayer extends Canvas {
                 }
             }
         }
+    }
+
+    public void setFlowPoints(ListProperty<Point> flowPoints) {
+        this.passedPipes = passedPipes;
     }
 }

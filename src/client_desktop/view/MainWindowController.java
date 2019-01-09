@@ -58,7 +58,7 @@ public class MainWindowController implements Initializable {
         System.out.println("Open File.");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Pipe File");
-        fileChooser.setInitialDirectory(new File("./resources"));
+        fileChooser.setInitialDirectory(new File("/client_desktop/resources/"));
 
         FileChooser.ExtensionFilter textExtensionFilter = new FileChooser.ExtensionFilter("Text Files", "*.txt");
         fileChooser.getExtensionFilters().add(textExtensionFilter);
@@ -96,11 +96,11 @@ public class MainWindowController implements Initializable {
             return;
         }
         System.out.println("Theme chosen: " + themeName);
-        pipeDisplayer.setBackgroundFileName("src/client_desktop/resources/" + themeName + "/background.png");
-        pipeDisplayer.setStartFileName("src/client_desktop/resources/" + themeName + "/start.png");
-        pipeDisplayer.setGoalFileName("src/client_desktop/resources/" + themeName + "/goal.png");
-        pipeDisplayer.setAngledPipeFileName("src/client_desktop/resources/" + themeName + "/pipeAngle.png");
-        pipeDisplayer.setVerticalPipeFileName("src/client_desktop/resources/" + themeName + "/pipeVertical.png");
+        pipeDisplayer.setBackgroundFileName("/client_desktop/resources/" + themeName + "/background.png");
+        pipeDisplayer.setStartFileName("/client_desktop/resources/" + themeName + "/start.png");
+        pipeDisplayer.setGoalFileName("/client_desktop/resources/" + themeName + "/goal.png");
+        pipeDisplayer.setAngledPipeFileName("/client_desktop/resources/" + themeName + "/pipeAngle.png");
+        pipeDisplayer.setVerticalPipeFileName("/client_desktop/resources/" + themeName + "/pipeVertical.png");
         this.currentTheme = themeName;
         // Configure the music path
         try {
