@@ -1,5 +1,6 @@
 package client_desktop.model;
 
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
@@ -12,6 +13,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class PipeGameModel implements GameModel {
+
+    public enum availableMoves {down, left, right, start, up}
 
     public BooleanProperty isGoalState;
     public ListProperty<Point> passedPipes;
@@ -31,6 +34,13 @@ public class PipeGameModel implements GameModel {
             timePassed.set(timePassed.get() + 1);
         }
     };
+    public TimerTask getNewTimerTask() {
+        return new TimerTask() {
+            public void run(){
+                Platform.runLater(()-> timePassed.set(timePassed.get() + 1));
+            }
+        };
+    }
 
     public PipeGameModel() {
         this.pipeGameBoard = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
@@ -48,11 +58,22 @@ public class PipeGameModel implements GameModel {
             if (startPosition != null) {
                 isGoalState.set(false);
                 passedPipes.clear();
-                isGoalState.set(isGoalStateCheck(startPosition, goalPosition));
+                isGoalStatePossible(startPosition.x, startPosition.y, availableMoves.start);
             }
         });
 
         this.isGoalState = new SimpleBooleanProperty();
+        this.isGoalState.addListener((observableValue, s, t1) -> {
+            if (true == isGoalState.get()) {
+                this.timer.cancel();
+                this.timer = null;
+            } else {
+                if (null == this.timer) {
+                    this.timer = new Timer();
+                    this.timer.scheduleAtFixedRate(getNewTimerTask(), 1000, 1000);
+                }
+            }
+        });
         this.passedPipes = new SimpleListProperty<>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
         this.stepsNumber = new SimpleIntegerProperty(0);
         this.timePassed = new SimpleIntegerProperty(0);
@@ -80,6 +101,90 @@ public class PipeGameModel implements GameModel {
                 (getBottom(current) != cameFrom && isBottomPossible(current) && isGoalFound(getBottom(current), current, goal)) ||
                 (getRight(current) != cameFrom && isRightPossible(current) && isGoalFound(getRight(current), current, goal))  ||
                 (getLeft(current) != cameFrom && isLeftPossible(current) && isGoalFound(getLeft(current), current, goal)));
+    }
+
+    private boolean isGoalStatePossible(int column, int row, availableMoves from) {
+        //check bounds
+        if (column < 0 || column >= pipeGameBoard.get(0).length)
+            return false;
+        if (row < 0 || row >= pipeGameBoard.size())
+            return false;
+        // start
+        if (from == availableMoves.start) {
+            return (isGoalStatePossible(column + 1, row, availableMoves.left) ||
+                    isGoalStatePossible(column - 1, row, availableMoves.right) ||
+                    isGoalStatePossible(column, row + 1, availableMoves.up) ||
+                    isGoalStatePossible(column, row - 1, availableMoves.down));
+        }
+
+        switch (pipeGameBoard.get(row)[column]) {
+            case '-':
+                if (from == availableMoves.left) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column + 1, row, availableMoves.left);
+                } else if (from == availableMoves.right) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column - 1, row, availableMoves.right);
+                } else {
+                    return false;
+                }
+            case 'g':
+                passedPipes.add(new Point(column, row));
+                isGoalState.set(true);
+                return true;
+            case 'F':
+                if (from == availableMoves.right) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column, row + 1, availableMoves.up);
+                } else if (from == availableMoves.down) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column + 1, row, availableMoves.left);
+                } else {
+                    return false;
+                }
+            case '|':
+                if (from == availableMoves.up) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column, row + 1, availableMoves.up);
+                } else if (from == availableMoves.down) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column, row - 1, availableMoves.down);
+                } else {
+                    return false;
+                }
+            case 'L':
+                if (from == availableMoves.up) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column + 1, row, availableMoves.left);
+                } else if (from == availableMoves.right) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column, row - 1, availableMoves.down);
+                } else {
+                    return false;
+                }
+
+            case 'J':
+                if (from == availableMoves.up) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column - 1, row, availableMoves.right);
+                } else if (from == availableMoves.left) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column, row - 1, availableMoves.down);
+                } else {
+                    return false;
+                }
+            case '7':
+                if (from == availableMoves.left) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column, row + 1, availableMoves.up);
+                } else if (from == availableMoves.down) {
+                    passedPipes.add(new Point(column, row));
+                    return isGoalStatePossible(column - 1, row, availableMoves.right);
+                } else {
+                    return false;
+                }
+        }
+        return false;
     }
 
     public boolean isTopPossible(Point cell) {
@@ -303,10 +408,10 @@ public class PipeGameModel implements GameModel {
 
     public void initBoard() {
         char[][] level = {
-                {'s','F',' ','-','L'},
-                {' ','J','J','-','L'},
-                {' ','F','|','-','L'},
-                {' ','L','L','-','g'},
+                {'s','-','7','-','L'},
+                {'F','J','|','-','L'},
+                {'F','F','|','-','L'},
+                {'F','L','L','-','g'},
         };
 
         setCleanBoard(level);
@@ -362,11 +467,40 @@ public class PipeGameModel implements GameModel {
     public void saveGame(File fileName) {
     }
 
-    public void connectServer(String serverIP, String serverPort) {
-
+    public void connectServer(String serverIP, String serverPort) throws IOException {
+        this.serverSocket = new Socket(serverIP, Integer.parseInt(serverPort));
+        System.out.println("Connected to server");
     }
 
     public void solve() throws IOException, InterruptedException {
+        // verify the connection.
+        if (this.serverSocket != null) {
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(this.serverSocket.getInputStream()));
+            PrintWriter outToServer = new PrintWriter(this.serverSocket.getOutputStream());
+
+            for (char[] line : this.pipeGameBoard.get()) {
+                // send board to the server.
+                outToServer.println(line);
+                outToServer.flush();
+            }
+            outToServer.println("done");
+            outToServer.flush();
+
+            String line;
+            // receive the solution.
+            while (!(line = inFromServer.readLine()).equals("done")) {
+                // changePipe accordingly. (consider sleep)
+                String[] moves = line.split(",");
+                int y = Integer.parseInt(moves[0]);
+                int x = Integer.parseInt(moves[1]);
+                int move = Integer.parseInt(moves[2]);
+                // start counting from 1, to skip 0 moves
+                for (int i = 1; i <= move; i++) {
+                    Platform.runLater(()-> rotateCell(x, y));
+                    Thread.sleep(100);
+                }
+            }
+        }
     }
 
     public void exit() {

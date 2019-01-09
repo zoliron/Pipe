@@ -213,16 +213,16 @@ public class PipeDisplayer extends Canvas {
                     Image pipeImage;
                     switch (pipeData[column][row]) {
                         case 'F':
-                            pipeImage = pipe270DegreeImage;
-                            break;
-                        case 'L':
-                            pipeImage = pipe180DegreeImage;
-                            break;
-                        case 'J':
                             pipeImage = pipe90DegreeImage;
                             break;
-                        case '7':
+                        case 'L':
                             pipeImage = pipe0DegreeImage;
+                            break;
+                        case 'J':
+                            pipeImage = pipe270DegreeImage;
+                            break;
+                        case '7':
+                            pipeImage = pipe180DegreeImage;
                             break;
                         case '-':
                             pipeImage = pipeHorizontalImage;

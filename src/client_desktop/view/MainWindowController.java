@@ -15,8 +15,10 @@ import client_desktop.view.Messeges.NakedObjectDisplayer;
 import client_desktop.view.Messeges.ThemeConfiguration;
 import client_desktop.view.Messeges.ServerConfiguration;
 import client_desktop.viewModel.PipeGameViewModel;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -212,7 +214,25 @@ public class MainWindowController implements Initializable {
         music.setCycleCount(INDEFINITE);
         music.play();
     }
-    public void solve(ActionEvent actionEvent) {
+    public void solve() {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    System.out.println("Trying to solve...");
+                    Platform.runLater(()->connectionStatus.setText("Server Status: Connecting to " + serverConfiguration.ServerIP + ":" + serverConfiguration.ServerPort));
+                    pipeGameViewModel.connectServer(serverConfiguration.ServerIP, serverConfiguration.ServerPort);
+                    pipeGameViewModel.solve();
+                    pipeGameViewModel.disconnectServer();
+                    Platform.runLater(()->connectionStatus.setText("Server Disconnected"));
+                } catch (IOException e) {
+                    Platform.runLater(()->connectionStatus.setText("Connection Error"));
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
     }
 
     public void reset(ActionEvent actionEvent) {
