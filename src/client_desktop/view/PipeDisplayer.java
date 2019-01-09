@@ -212,17 +212,17 @@ public class PipeDisplayer extends Canvas {
                 for (int row = 0; row < pipeData[column].length; row++) {
                     Image pipeImage;
                     switch (pipeData[column][row]) {
-                        case 'L':
-                            pipeImage = pipe180DegreeImage;
-                            break;
                         case 'F':
                             pipeImage = pipe270DegreeImage;
                             break;
-                        case '7':
-                            pipeImage = pipe0DegreeImage;
+                        case 'L':
+                            pipeImage = pipe180DegreeImage;
                             break;
                         case 'J':
                             pipeImage = pipe90DegreeImage;
+                            break;
+                        case '7':
+                            pipeImage = pipe0DegreeImage;
                             break;
                         case '-':
                             pipeImage = pipeHorizontalImage;
@@ -245,11 +245,8 @@ public class PipeDisplayer extends Canvas {
                     }
 
                     if (pipeImage != null) {
-                        if (null != passedPipes && passedPipes.contains(new Point(row, column))) {
+                        if (passedPipes != null && passedPipes.contains(new Point(row, column))) {
                             graphicsContext.save();
-                            Bloom bloom = new Bloom();
-                            bloom.setThreshold(0.5);
-                            graphicsContext.setEffect(bloom);
                             graphicsContext.drawImage(pipeImage, row * width, column * height, width, height);
                             graphicsContext.restore();
                         } else {
