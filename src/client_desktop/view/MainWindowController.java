@@ -89,6 +89,8 @@ public class MainWindowController implements Initializable {
                 NakedMessage newMessage = new NakedMessage("Congratulations");
                 newMessage.addMessage("Time Passed: " + timePassed.get());
                 newMessage.addMessage("Moves Count: " + stepsNumber.get());
+                // Resets the stepsNumber to 0 when finished
+                stepsNumber.set(0);
                 nakedObjectDisplayer.display(newMessage);
             }
         });
@@ -174,7 +176,7 @@ public class MainWindowController implements Initializable {
 
     void changeTheme(String themeName) {
         if (themeName.equals(this.currentTheme)) {
-            System.out.println("Theme is ok");
+            System.out.println("Same Theme");
             return;
         }
         System.out.println("Theme chosen: " + themeName);
@@ -220,7 +222,7 @@ public class MainWindowController implements Initializable {
             protected Void call() throws Exception {
                 try {
                     System.out.println("Trying to solve...");
-                    Platform.runLater(()->connectionStatus.setText("Server Status: Connecting to " + serverConfiguration.ServerIP + ":" + serverConfiguration.ServerPort));
+                    Platform.runLater(()->connectionStatus.setText("Connecting to " + serverConfiguration.ServerIP + ":" + serverConfiguration.ServerPort));
                     pipeGameViewModel.connectServer(serverConfiguration.ServerIP, serverConfiguration.ServerPort);
                     pipeGameViewModel.solve();
                     pipeGameViewModel.disconnectServer();
