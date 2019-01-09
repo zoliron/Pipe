@@ -185,7 +185,7 @@ public class MainWindowController implements Initializable {
 
 
     public void serverConfig(ActionEvent actionEvent) {
-
+        nakedObjectDisplayer.display(this.serverConfiguration);
     }
 
     public void themeConfig(ActionEvent actionEvent) {
