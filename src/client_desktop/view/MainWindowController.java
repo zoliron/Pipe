@@ -32,6 +32,7 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Setting the default theme before loading the proper images
         changeTheme("plants");
         try {
             pipeDisplayer.imagesInit();

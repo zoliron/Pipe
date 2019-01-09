@@ -54,6 +54,43 @@ public class PipeDisplayer extends Canvas {
         this.verticalPipeFileName = new SimpleStringProperty();
     }
 
+    @Override
+    public boolean isResizable() {
+        return true;
+    }
+
+    @Override
+    public double minHeight(double width) {
+        return 0;
+    }
+
+    @Override
+    public double maxHeight(double width) {
+        return 9999;
+    }
+
+    @Override
+    public double prefHeight(double width) {
+        return minHeight(width);
+    }
+
+    @Override
+    public double minWidth(double height) {
+        return 0;
+    }
+
+    @Override
+    public double maxWidth(double height) {
+        return 9999;
+    }
+
+    @Override
+    public void resize(double width, double height) {
+        super.setWidth(width);
+        super.setHeight(height);
+        this.boardDraw();
+    }
+
     public char[][] getPipeData() {
         return pipeData;
     }
