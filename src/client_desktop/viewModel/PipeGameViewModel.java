@@ -12,7 +12,7 @@ import java.io.File;
 public class PipeGameViewModel {
 
     public ListProperty<char[]> pipeGameBoard;
-    public BooleanProperty isGoal;
+    public BooleanProperty isGoalState;
     public ListProperty<Point> passedPipes;
     public IntegerProperty stepsNumber;
     public IntegerProperty timePassed;
@@ -22,8 +22,8 @@ public class PipeGameViewModel {
         this.pipeGameModel = pipeGameModel;
         this.pipeGameBoard = new SimpleListProperty<>();
         this.pipeGameBoard.bind(this.pipeGameModel.pipeGameBoard);
-        this.isGoal = new SimpleBooleanProperty();
-        this.isGoal.bind(this.pipeGameModel.isGoalState);
+        this.isGoalState = new SimpleBooleanProperty();
+        this.isGoalState.bind(this.pipeGameModel.isGoalState);
         this.passedPipes = new SimpleListProperty<>();
         this.passedPipes.bind(this.pipeGameModel.passedPipes);
         this.passedPipes = new SimpleListProperty<>();

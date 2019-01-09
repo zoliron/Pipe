@@ -15,9 +15,14 @@ import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MainWindowController implements Initializable {
 
@@ -58,10 +63,17 @@ public class MainWindowController implements Initializable {
             pipeDisplayer.setPipeData(this.pipeGameBoard.toArray(new char[this.pipeGameBoard.size()][]));
         });
         this.isGoalState = new SimpleBooleanProperty();
-        this.isGoalState.bind(this.pipeGameViewModel.isGoal);
+        this.isGoalState.bind(this.pipeGameViewModel.isGoalState);
         this.isGoalState.addListener((observableValue, s, t1) -> {
             if (isGoalState.get() == true) {
                 System.out.println("You won !");
+                final Stage dialog = new Stage();
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                VBox dialogVbox = new VBox(15);
+                dialogVbox.getChildren().add(new Text("You won !"));
+                Scene dialogScene = new Scene(dialogVbox, 35, 35);
+                dialog.setScene(dialogScene);
+                dialog.show();
             }
         });
         this.passedPipes = new SimpleListProperty<Point>();

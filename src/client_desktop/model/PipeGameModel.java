@@ -46,6 +46,7 @@ public class PipeGameModel implements GameModel {
             }
 
             if (startPosition != null) {
+                isGoalState.set(false);
                 passedPipes.clear();
                 isGoalState.set(isGoalStateCheck(startPosition, goalPosition));
             }
@@ -312,47 +313,47 @@ public class PipeGameModel implements GameModel {
         this.pipeGameBoard.addAll(level);
     }
 
-    public void rotateCell(int x, int y) {
-        switch (this.pipeGameBoard.get(y)[x]) {
+    public void rotateCell(int column, int row) {
+        switch (this.pipeGameBoard.get(row)[column]) {
             case '-':
-                this.pipeGameBoard.get(y)[x] = '|';
+                this.pipeGameBoard.get(row)[column] = '|';
                 stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case '7':
-                this.pipeGameBoard.get(y)[x] = 'J';
+                this.pipeGameBoard.get(row)[column] = 'J';
                 stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case 'F':
-                this.pipeGameBoard.get(y)[x] = '7';
+                this.pipeGameBoard.get(row)[column] = '7';
                 stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case 'L':
-                this.pipeGameBoard.get(y)[x] = 'F';
+                this.pipeGameBoard.get(row)[column] = 'F';
                 stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case 'J':
-                this.pipeGameBoard.get(y)[x] = 'L';
+                this.pipeGameBoard.get(row)[column] = 'L';
                 stepsNumber.set(stepsNumber.get() + 1);
                 break;
             case '|':
-                this.pipeGameBoard.get(y)[x] = '-';
+                this.pipeGameBoard.get(row)[column] = '-';
                 stepsNumber.set(stepsNumber.get() + 1);
                 break;
 
             case ' ':
-                this.pipeGameBoard.get(y)[x] = ' ';
+                this.pipeGameBoard.get(row)[column] = ' ';
                 break;
             case 's':
-                this.pipeGameBoard.get(y)[x] = 's';
+                this.pipeGameBoard.get(row)[column] = 's';
                 break;
             case 'g':
-                this.pipeGameBoard.get(y)[x] = 'g';
+                this.pipeGameBoard.get(row)[column] = 'g';
                 break;
             default:
-                this.pipeGameBoard.get(y)[x] = ' ';
+                this.pipeGameBoard.get(row)[column] = ' ';
                 break;
         }
-        this.pipeGameBoard.set(y, this.pipeGameBoard.get(y));
+        this.pipeGameBoard.set(row, this.pipeGameBoard.get(row));
     }
 
     public void loadGame(String fileName) {
