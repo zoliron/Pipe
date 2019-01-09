@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client_desktop.view.Messeges.NakedMessage;
+import client_desktop.view.Messeges.NakedObjectDisplayer;
+import client_desktop.view.Messeges.ThemeConfiguration;
+import client_desktop.view.Messeges.ServerConfiguration;
 import client_desktop.viewModel.PipeGameViewModel;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -33,6 +37,10 @@ public class MainWindowController implements Initializable {
     IntegerProperty stepsNumber;
     ListProperty<char[]> pipeGameBoard;
     IntegerProperty timePassed;
+
+    NakedObjectDisplayer nakedObjectDisplayer = new NakedObjectDisplayer();
+    ServerConfiguration serverConfiguration = new ServerConfiguration();
+    ThemeConfiguration themeConfiguration = new ThemeConfiguration();
 
     @FXML
     PipeDisplayer pipeDisplayer;
@@ -67,13 +75,10 @@ public class MainWindowController implements Initializable {
         this.isGoalState.addListener((observableValue, s, t1) -> {
             if (isGoalState.get() == true) {
                 System.out.println("You won !");
-                final Stage dialog = new Stage();
-                dialog.initModality(Modality.APPLICATION_MODAL);
-                VBox dialogVbox = new VBox(15);
-                dialogVbox.getChildren().add(new Text("You won !"));
-                Scene dialogScene = new Scene(dialogVbox, 35, 35);
-                dialog.setScene(dialogScene);
-                dialog.show();
+                NakedMessage newMessege = new NakedMessage("Congratulations");
+                newMessege.addMessage("Time Passed: " + timePassed.get());
+                newMessege.addMessage("Moves Count: " + stepsNumber.get());
+                nakedObjectDisplayer.display(newMessege);
             }
         });
         this.passedPipes = new SimpleListProperty<Point>();
@@ -180,9 +185,11 @@ public class MainWindowController implements Initializable {
 
 
     public void serverConfig(ActionEvent actionEvent) {
+
     }
 
     public void themeConfig(ActionEvent actionEvent) {
+
     }
 
     public void solve(ActionEvent actionEvent) {

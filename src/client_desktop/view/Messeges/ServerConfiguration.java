@@ -10,7 +10,7 @@ import java.util.List;
  * @author giladber
  *
  */
-class ServerConfiguration implements NakedObject {
+public class ServerConfiguration implements NakedObject {
     // Field names here
     private final String serverIpText = "Server IP";
     private final String serverPortText = "Server Port";
