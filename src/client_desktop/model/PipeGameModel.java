@@ -363,6 +363,7 @@ public class PipeGameModel implements GameModel {
     }
 
     public void connectServer(String serverIP, String serverPort) {
+
     }
 
     public void solve() throws IOException, InterruptedException {

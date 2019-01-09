@@ -9,7 +9,7 @@ public class ThemeConfiguration implements NakedList {
     private ObservableList<String> options;
 
     public ThemeConfiguration() {
-        this.options = FXCollections.observableArrayList("plants");
+        this.options = FXCollections.observableArrayList("plants", "plumber");
     }
 
     @Override
