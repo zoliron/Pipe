@@ -18,7 +18,7 @@
 <?import javafx.scene.image.Image?>
 
 <?import javafx.scene.control.TextField?>
-<BorderPane prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="client_desktop.view.MainWindowController">
+<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="client_desktop.view.MainWindowController">
     <bottom>
         <HBox BorderPane.alignment="CENTER">
             <Label fx:id="connectionStatus" text="Status:" />
