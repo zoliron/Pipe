@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
+import java.io.IOException;
+
 
 public class Main extends Application {
 
@@ -21,7 +23,13 @@ public class Main extends Application {
             MainWindowController mainWindowController = fxl.getController();
             mainWindowController.setViewModel(pipeGameViewModel);
             pipeGameModel.initBoard();
-            primaryStage.setOnCloseRequest((event -> mainWindowController.exit()));
+            primaryStage.setOnCloseRequest((event -> {
+                try {
+                    mainWindowController.exit();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);

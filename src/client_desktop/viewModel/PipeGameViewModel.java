@@ -50,7 +50,7 @@ public class PipeGameViewModel {
         this.pipeGameModel.connectServer(serverIp, serverPort);
     }
 
-    public void exit() {
+    public void exit() throws IOException {
         this.pipeGameModel.exit();
     }
 
@@ -61,7 +61,7 @@ public class PipeGameViewModel {
         this.pipeGameModel.resetStats();
     }
 
-    public void disconnectServer() {
+    public void disconnectServer() throws IOException {
         this.pipeGameModel.disconnectServer();
     }
 }

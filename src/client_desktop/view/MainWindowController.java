@@ -133,9 +133,10 @@ public class MainWindowController implements Initializable {
         System.out.println("Stop clicked");
     }
 
-    public void exit() {
+    public void exit() throws IOException {
         System.out.println("Exiting");
-        System.exit(0);
+        music.stop();
+        this.pipeGameViewModel.exit();
     }
 
     public void openFile() {

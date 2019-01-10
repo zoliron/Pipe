@@ -536,9 +536,8 @@ public class PipeGameModel implements GameModel {
         }
     }
 
-    public void exit() {
+    public void exit() throws IOException {
         System.out.println("Exit");
-        timer.cancel();
         this.disconnectServer();
         System.exit(0);
     }
@@ -565,12 +564,9 @@ public class PipeGameModel implements GameModel {
     }
 
 
-    public void disconnectServer() {
-        if(this.serverSocket != null)
-            try {
-                this.serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void disconnectServer() throws IOException {
+        if (this.serverSocket.isConnected()) {
+            this.serverSocket.close();
+        }
     }
 }
