@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
@@ -10,18 +17,18 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import client_desktop.view.PipeDisplayer?>
-
-
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-
 <?import javafx.scene.control.TextField?>
-<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="client_desktop.view.MainWindowController">
+
+<?import client_desktop.view.PipeDisplayer?>
+<BorderPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client_desktop.view.MainWindowController">
     <bottom>
         <HBox BorderPane.alignment="CENTER">
-            <Label fx:id="connectionStatus" text="Status:" />
+           <children>
+               <Label fx:id="connectionStatus" text="Status:" />
+           </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </BorderPane.margin>
@@ -29,7 +36,9 @@
     </bottom>
     <center>
         <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <PipeDisplayer fx:id="pipeDisplayer" height="300.0" width="300.0" />
+           <children>
+               <PipeDisplayer fx:id="pipeDisplayer" height="300.0" width="300.0" />
+           </children>
         </StackPane>
     </center>
     <left>
@@ -40,32 +49,62 @@
     </right>
     <top>
         <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="48.0" prefHeight="62.0" prefWidth="366.0" BorderPane.alignment="CENTER">
-            <MenuBar>
-                <Menu mnemonicParsing="false" text="File">
-                    <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open File" />
-                    <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save as..." />
-                    <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
-                </Menu>
-                <Menu mnemonicParsing="false" text="Preference">
-                    <MenuItem mnemonicParsing="false" onAction="#serverConfig" text="Server" />
-                    <MenuItem mnemonicParsing="false" onAction="#themeConfig" text="Theme" />
-                </Menu>
-            </MenuBar>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                <Label text="Time Passed:" />
-                <TextField fx:id="secondsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
-                <Label text="Steps:" />
-                <TextField fx:id="stepsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
-                <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" minWidth="52.0" mnemonicParsing="false" onAction="#solve" text="Solve">
-                    <HBox.margin>
-                        <Insets right="10.0" />
-                    </HBox.margin>
-                </Button>
-                <VBox.margin>
-                    <Insets bottom="10.0" top="10.0" />
-                </VBox.margin>
-                <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" minWidth="52.0" mnemonicParsing="false" onAction="#reset" text="Reset" />
-            </HBox>
+           <children>
+               <MenuBar>
+                  <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                         <items>
+                             <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open File" />
+                             <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save File" />
+                             <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
+                         </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Options">
+                         <items>
+                             <MenuItem mnemonicParsing="false" onAction="#serverConfig" text="Server" />
+                             <MenuItem mnemonicParsing="false" onAction="#themeConfig" text="Theme" />
+                         </items>
+                      </Menu>
+                  </menus>
+               <effect>
+                  <Lighting>
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant color="#8cfffd" />
+                     </light>
+                  </Lighting>
+               </effect>
+               </MenuBar>
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                  <children>
+                      <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" minWidth="52.0" mnemonicParsing="false" onAction="#solve" text="Solve">
+                          <HBox.margin>
+                              <Insets right="10.0" />
+                          </HBox.margin>
+                      </Button>
+                      <Label text="Time Passed:" />
+                      <TextField fx:id="secondsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
+                      <Label text="Steps:" />
+                      <TextField fx:id="stepsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
+                      <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" minWidth="52.0" mnemonicParsing="false" onAction="#reset" text="Reset" />
+                  </children>
+                   <VBox.margin>
+                       <Insets bottom="10.0" top="10.0" />
+                   </VBox.margin>
+               <effect>
+                  <Lighting>
+                     <bumpInput>
+                        <Shadow height="7.5" radius="3.875" width="10.0" />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant color="#8cfffd" />
+                     </light>
+                  </Lighting>
+               </effect>
+               </HBox>
+           </children>
         </VBox>
     </top>
 </BorderPane>
