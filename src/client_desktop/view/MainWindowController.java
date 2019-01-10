@@ -235,7 +235,8 @@ public class MainWindowController implements Initializable {
         new Thread(solvingTask).start();
     }
 
-    public void reset(ActionEvent actionEvent) {
+    public void resetStats() {
+        this.pipeGameViewModel.resetStats();
     }
 
 

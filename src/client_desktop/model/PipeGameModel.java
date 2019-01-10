@@ -414,7 +414,6 @@ public class PipeGameModel implements GameModel {
                 {'F','F','|','-','L'},
                 {'F','L','L','-','g'},
         };
-
         setCleanBoard(level);
         this.pipeGameBoard.addAll(level);
     }
@@ -540,37 +539,31 @@ public class PipeGameModel implements GameModel {
     public void exit() {
         System.out.println("Exit");
         timer.cancel();
-
         this.disconnectServer();
-
         System.exit(0);
     }
 
-    public void reset() {
+    public void resetStats() {
         timePassed.set(0);
         stepsNumber.set(0);
         this.pipeGameBoard.setAll(getCleanBoard());
     }
 
     public void setCleanBoard(char[][] board) {
+        this.clean = new char[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            System.arraycopy(board[i], 0, this.clean[i], 0, board[0].length);
+        }
     }
 
     public char[][] getCleanBoard() {
         char[][] cloneBoard = new char[this.clean.length][this.clean[0].length];
-        for (int k = 0; k < this.clean.length; k++) {
-            System.arraycopy(this.clean[k], 0, cloneBoard[k], 0, this.clean[0].length);
+        for (int i = 0; i < this.clean.length; i++) {
+            System.arraycopy(this.clean[i], 0, cloneBoard[i], 0, this.clean[0].length);
         }
         return cloneBoard;
     }
 
-
-    public char[][] clean() {
-        char[][] cloneBoard = new char[this.clean.length][this.clean[0].length];
-        for (int k = 0; k < this.clean.length; k++) {
-            System.arraycopy(this.clean[k], 0, cloneBoard[k], 0, this.clean[0].length);
-        }
-        return cloneBoard;
-    }
 
     public void disconnectServer() {
         if(this.serverSocket != null)

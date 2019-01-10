@@ -57,8 +57,8 @@ public class PipeGameViewModel {
     public void solve() throws IOException, InterruptedException {
         this.pipeGameModel.solve();
     }
-    public void reset() {
-        this.pipeGameModel.reset();
+    public void resetStats() {
+        this.pipeGameModel.resetStats();
     }
 
     public void disconnectServer() {

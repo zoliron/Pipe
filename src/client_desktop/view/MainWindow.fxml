@@ -88,7 +88,7 @@
                       <TextField fx:id="secondsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
                       <Label text="Steps:" />
                       <TextField fx:id="stepsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
-                      <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" minWidth="52.0" mnemonicParsing="false" onAction="#reset" text="Reset" />
+                      <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" minWidth="52.0" mnemonicParsing="false" onAction="#resetStats" text="Reset" />
                   </children>
                    <VBox.margin>
                        <Insets bottom="10.0" top="10.0" />
