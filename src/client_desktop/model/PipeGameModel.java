@@ -47,12 +47,12 @@ public class PipeGameModel implements GameModel {
         this.pipeGameBoard = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
         this.pipeGameBoard.addListener((ObservableValue, s, t1) ->{
             char[][] cells = this.pipeGameBoard.toArray(new char[this.pipeGameBoard.size()][]);
-            for(int i=0; i < cells.length; i++) {
-                for(int j=0; j< cells[i].length; j++) {
-                    if (cells[i][j] == 's')
-                        startPosition = new Point(i, j);
-                    if (cells[i][j] == 'g')
-                        goalPosition = new Point(i, j);
+            for(int column=0; column < cells.length; column++) {
+                for(int row=0; row< cells[column].length; row++) {
+                    if (cells[column][row] == 's')
+                        startPosition = new Point(column, row);
+                    if (cells[column][row] == 'g')
+                        goalPosition = new Point(column, row);
                 }
             }
 
