@@ -462,19 +462,17 @@ public class PipeGameModel implements GameModel {
         this.pipeGameBoard.set(row, this.pipeGameBoard.get(row));
     }
 
-    public void loadGame(String fileName) {
+    public void loadFile(String fileName) {
         List<char[]> mapBuilder = new ArrayList<char[]>();
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(fileName));
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Time:")) {
-                    // load game time from file
+                if (line.startsWith("Time Passed:")) {
                     int time = Integer.parseInt(line.split(":")[1]);
                     timePassed.set(time);
-                } else if (line.startsWith("Step:")) {
-                    // load game steps from file
+                } else if (line.startsWith("Steps Passed:")) {
                     int step = Integer.parseInt(line.split(":")[1]);
                     stepsNumber.set(step);
                 } else {
@@ -489,7 +487,18 @@ public class PipeGameModel implements GameModel {
         }
     }
 
-    public void saveGame(File fileName) {
+    public void saveFile(File fileName) {
+        try {
+            PrintWriter savedFile = new PrintWriter(fileName);
+            for (int i = 0; i < this.pipeGameBoard.size(); i++) {
+                savedFile.println(new String(this.pipeGameBoard.get(i)));
+            }
+            savedFile.println("Time Passed:" + timePassed.get());
+            savedFile.println("Steps Number:" + stepsNumber.get());
+            savedFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void connectServer(String serverIP, String serverPort) throws IOException {

@@ -152,8 +152,24 @@ public class MainWindowController implements Initializable {
 
         if (chosenFile != null) {
             System.out.println(chosenFile.getName());
-            pipeGameViewModel.loadGame(chosenFile.getAbsolutePath());
+            pipeGameViewModel.loadFile(chosenFile.getAbsolutePath());
         }
+    }
+
+    public void saveFile() {
+        System.out.println("Saving File Button Pressed");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Where Do You Want To Save The File?");
+        FileChooser.ExtensionFilter txtExtensionFilter = new FileChooser.ExtensionFilter("Text Files", "*.txt");
+        fileChooser.getExtensionFilters().add(txtExtensionFilter);
+        fileChooser.setSelectedExtensionFilter(txtExtensionFilter);
+
+        File selectedFile = fileChooser.showSaveDialog(null);
+
+        if (selectedFile == null) {
+            return;
+        }
+        pipeGameViewModel.saveFile(selectedFile);
     }
 
     void changeTheme(String themeName) {

@@ -38,12 +38,12 @@ public class PipeGameViewModel {
         this.pipeGameModel.rotateCell(x, y);
     }
 
-    public void loadGame(String fileName) {
-        this.pipeGameModel.loadGame(fileName);
+    public void loadFile(String fileName) {
+        this.pipeGameModel.loadFile(fileName);
     }
 
-    public void saveGame(File file) {
-        this.pipeGameModel.saveGame(file);
+    public void saveFile(File file) {
+        this.pipeGameModel.saveFile(file);
     }
 
     public void connectServer(String serverIp, String serverPort) throws IOException {

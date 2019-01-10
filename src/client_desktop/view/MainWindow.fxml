@@ -43,6 +43,7 @@
             <MenuBar>
                 <Menu mnemonicParsing="false" text="File">
                     <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open File" />
+                    <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save as..." />
                     <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
                 </Menu>
                 <Menu mnemonicParsing="false" text="Preference">
@@ -51,7 +52,7 @@
                 </Menu>
             </MenuBar>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                <Label text="Time Elapsed:" />
+                <Label text="Time Passed:" />
                 <TextField fx:id="secondsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
                 <Label text="Steps:" />
                 <TextField fx:id="stepsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
