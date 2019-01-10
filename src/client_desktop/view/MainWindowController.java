@@ -139,39 +139,21 @@ public class MainWindowController implements Initializable {
     }
 
     public void openFile() {
-        System.out.println("Open File.");
+        System.out.println("Open File Button Pressed");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Pipe File");
-        fileChooser.setInitialDirectory(new File("/client_desktop/resources/"));
+        // need to fix the default path to open
+//        fileChooser.setInitialDirectory(new File("/client_desktop/resources/levels"));
 
-        FileChooser.ExtensionFilter textExtensionFilter = new FileChooser.ExtensionFilter("Text Files", "*.txt");
-        fileChooser.getExtensionFilters().add(textExtensionFilter);
-        fileChooser.setSelectedExtensionFilter(textExtensionFilter);
+        FileChooser.ExtensionFilter txtExtensionFilter = new FileChooser.ExtensionFilter("Text Files", "*.txt");
+        fileChooser.getExtensionFilters().add(txtExtensionFilter);
+        fileChooser.setSelectedExtensionFilter(txtExtensionFilter);
         File chosenFile = fileChooser.showOpenDialog(null);
 
         if (chosenFile != null) {
             System.out.println(chosenFile.getName());
-            List<char[]> lines = new ArrayList<char[]>();
-            BufferedReader reader;
-            try {
-                reader = new BufferedReader(new FileReader(chosenFile));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    lines.add(line.toCharArray());
-                }
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            char[][] charArray = lines.toArray(new char[lines.size()][]);
-            pipeDisplayer.setPipeData(charArray);
+            pipeGameViewModel.loadGame(chosenFile.getAbsolutePath());
         }
-        else {
-            System.out.println("Test");
-        }
-
     }
 
     void changeTheme(String themeName) {
@@ -217,7 +199,7 @@ public class MainWindowController implements Initializable {
         music.play();
     }
     public void solve() {
-        Task<Void> task = new Task<Void>() {
+        Task<Void> solvingTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 try {
@@ -234,7 +216,7 @@ public class MainWindowController implements Initializable {
                 return null;
             }
         };
-        new Thread(task).start();
+        new Thread(solvingTask).start();
     }
 
     public void reset(ActionEvent actionEvent) {

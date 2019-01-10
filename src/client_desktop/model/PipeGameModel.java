@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -462,6 +463,30 @@ public class PipeGameModel implements GameModel {
     }
 
     public void loadGame(String fileName) {
+        List<char[]> mapBuilder = new ArrayList<char[]>();
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Time:")) {
+                    // load game time from file
+                    int time = Integer.parseInt(line.split(":")[1]);
+                    timePassed.set(time);
+                } else if (line.startsWith("Step:")) {
+                    // load game steps from file
+                    int step = Integer.parseInt(line.split(":")[1]);
+                    stepsNumber.set(step);
+                } else {
+                    mapBuilder.add(line.toCharArray());
+                }
+            }
+            setCleanBoard(mapBuilder.toArray(new char[mapBuilder.size()][]));
+            this.pipeGameBoard.setAll(mapBuilder.toArray(new char[mapBuilder.size()][]));
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveGame(File fileName) {
