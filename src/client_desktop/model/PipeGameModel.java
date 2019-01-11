@@ -22,7 +22,7 @@ public class PipeGameModel implements GameModel {
     public IntegerProperty stepsNumber;
     public IntegerProperty timePassed;
     public char[][] clean;
-    private Socket serverSocket;
+    private Socket serverSocket = null;
     public ListProperty<char[]> pipeGameBoard;
     private Point startPosition = null;
     private Point goalPosition = null;
@@ -506,28 +506,21 @@ public class PipeGameModel implements GameModel {
     }
 
     public void solve() throws IOException, InterruptedException {
-        // verify the connection.
         if (this.serverSocket != null) {
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(this.serverSocket.getInputStream()));
             PrintWriter outToServer = new PrintWriter(this.serverSocket.getOutputStream());
-
             for (char[] line : this.pipeGameBoard.get()) {
-                // send board to the server.
                 outToServer.println(line);
                 outToServer.flush();
             }
             outToServer.println("done");
             outToServer.flush();
-
             String line;
-            // receive the solution.
             while (!(line = inFromServer.readLine()).equals("done")) {
-                // changePipe accordingly. (consider sleep)
                 String[] moves = line.split(",");
                 int y = Integer.parseInt(moves[0]);
                 int x = Integer.parseInt(moves[1]);
                 int move = Integer.parseInt(moves[2]);
-                // start counting from 1, to skip 0 moves
                 for (int i = 1; i <= move; i++) {
                     Platform.runLater(()-> rotateCell(x, y));
                     Thread.sleep(100);
@@ -538,7 +531,7 @@ public class PipeGameModel implements GameModel {
 
     public void exit() throws IOException {
         System.out.println("Exit");
-        this.disconnectServer();
+        disconnectServer();
         System.exit(0);
     }
 
@@ -565,7 +558,7 @@ public class PipeGameModel implements GameModel {
 
 
     public void disconnectServer() throws IOException {
-        if (this.serverSocket.isConnected()) {
+        if (this.serverSocket != null) {
             this.serverSocket.close();
         }
     }

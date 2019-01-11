@@ -137,6 +137,7 @@ public class MainWindowController implements Initializable {
         System.out.println("Exiting");
         music.stop();
         this.pipeGameViewModel.exit();
+        System.exit(0);
     }
 
     public void openFile() {
